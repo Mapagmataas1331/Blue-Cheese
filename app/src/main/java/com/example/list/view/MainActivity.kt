@@ -1,7 +1,7 @@
 package com.example.list.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.example.list.R
 
 class MainActivity : AppCompatActivity() {
