@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="app_name">Список</string>
+  <string name="app_name">Больше никакой просроченной еды</string>
   <string name="element_title">Название элемента</string>
   <string name="edit_button">Изменить</string>
   <string name="delete_button">Удалить</string>
