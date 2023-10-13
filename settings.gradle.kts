@@ -13,6 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "list"
+rootProject.name = "Blue Cheese"
 include(":app")
  

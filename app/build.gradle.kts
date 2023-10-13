@@ -14,7 +14,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.list"
+        applicationId = "com.example.BlueCheese"
         minSdk = 21
         targetSdk = 34
         versionCode = 1
