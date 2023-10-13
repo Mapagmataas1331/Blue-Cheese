@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">Список</string>
+  <string name="element_title">Название элемента</string>
+  <string name="edit_button">Изменить</string>
+  <string name="delete_button">Удалить</string>
+  <string name="add_button">Добавить</string>
+  <string name="create_button">Создать</string>
+  <string name="delete_item_title">Удалить элемент</string>
+  <string name="delete_item_message">Вы уверены что хотите удалить элемент: %1$s</string>
+  <string name="delete_item_button_delete">Удалить</string>
+  <string name="delete_item_button_cancel">Отменить</string>
+</resources>
