@@ -1,25 +1,28 @@
 package com.example.list.view
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import com.example.list.R
-import android.content.Context
 
 class ListAdapter(
   initialDataSet: List<String>,
   private val context: Context,
   private val sharedPreferencesManager: SharedPreferencesManager,
-  private val onButtonClick: (position: Int, title: String) -> Unit
+  private val onItemClick: (position: Int, title: String) -> Unit
 ) : RecyclerView.Adapter<ListAdapter.ListViewHolder>() {
   private val dataSet = initialDataSet.toMutableList()
 
   inner class ListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val textView: TextView = view.findViewById(R.id.item_text)
+    val editButton: AppCompatButton = view.findViewById(R.id.item_edit)
+    val deleteButton: AppCompatButton = view.findViewById(R.id.item_delete)
   }
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -34,8 +37,16 @@ class ListAdapter(
     val itemTitle = dataSet[position]
     holder.textView.text = itemTitle
 
+    holder.editButton.setOnClickListener {
+      onItemClick(position, itemTitle)
+    }
+
+    holder.deleteButton.setOnClickListener {
+      showDeleteDialog(position, itemTitle)
+    }
+
     holder.itemView.setOnClickListener {
-      onButtonClick(position, itemTitle)
+      onItemClick(position, itemTitle)
     }
 
     holder.itemView.setOnLongClickListener {
@@ -44,7 +55,6 @@ class ListAdapter(
     }
   }
 
-  @SuppressLint("NotifyDataSetChanged")
   private fun showDeleteDialog(position: Int, itemTitle: String) {
     AlertDialog.Builder(context)
       .setTitle(context.getString(R.string.delete_item_title))
@@ -52,9 +62,7 @@ class ListAdapter(
       .setPositiveButton(context.getString(R.string.delete_item_button_delete)) { _, _ ->
         remove(position)
       }
-      .setNegativeButton(context.getString(R.string.delete_item_button_cancel)) { _, _ ->
-        notifyDataSetChanged()
-      }
+      .setNegativeButton(context.getString(R.string.delete_item_button_cancel), null)
       .show()
   }
 
@@ -63,10 +71,12 @@ class ListAdapter(
     notifyItemInserted(dataSet.lastIndex)
   }
 
+  @SuppressLint("NotifyDataSetChanged")
   fun remove(position: Int) {
     dataSet.removeAt(position)
     notifyItemRemoved(position)
     sharedPreferencesManager.saveItems(dataSet)
+    notifyDataSetChanged()
   }
 
   fun edit(position: Int, newTitle: String) {
