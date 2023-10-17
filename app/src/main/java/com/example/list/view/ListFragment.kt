@@ -4,16 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.list.R
 import com.example.list.databinding.ListFragmentBinding
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
+import androidx.core.content.res.ResourcesCompat
+import androidx.appcompat.app.AlertDialog
 
 class ListFragment : Fragment() {
   private lateinit var adapter: ListAdapter
@@ -34,24 +34,9 @@ class ListFragment : Fragment() {
       val title = adapter.getDataAtPosition(position)
 
       if (swipeDir == ItemTouchHelper.LEFT) {
-        AlertDialog.Builder(requireContext())
-          .setTitle(getString(R.string.delete_item_title))
-          .setMessage(getString(R.string.delete_item_message, title))
-          .setPositiveButton(getString(R.string.delete_item_button_delete)) { dialog, _ ->
-            adapter.remove(position)
-            dialog.dismiss()
-          }
-          .setNegativeButton(getString(R.string.delete_item_button_cancel)) { dialog, _ ->
-            adapter.notifyItemChanged(position)
-            dialog.dismiss()
-          }
-          .show()
+        showDeleteDialog(position, title)
       } else if (swipeDir == ItemTouchHelper.RIGHT) {
-        parentFragmentManager
-          .beginTransaction()
-          .replace(R.id.container, AddItemFragment.editItemInstance(position, title))
-          .addToBackStack(AddItemFragment::class.java.canonicalName)
-          .commit()
+        editItem(position, title)
       }
     }
   }
@@ -60,14 +45,13 @@ class ListFragment : Fragment() {
     super.onCreate(savedInstanceState)
     sharedPreferencesManager = SharedPreferencesManager(requireContext())
     val savedItems = sharedPreferencesManager.loadItems()
-    adapter = ListAdapter(savedItems) { position, title ->
-      parentFragmentManager
-        .beginTransaction()
-        .replace(R.id.container, AddItemFragment.editItemInstance(position, title))
-        .addToBackStack(AddItemFragment::class.java.canonicalName)
-        .commit()
+    adapter = ListAdapter(
+      initialDataSet = savedItems,
+      context = requireContext(),
+      sharedPreferencesManager = sharedPreferencesManager,
+    ) { position, title ->
+      editItem(position, title)
     }
-    adapter.setSharedPreferencesManager(sharedPreferencesManager)
 
     setFragmentResultListener(ADD_ITEM_REQUEST_KEY) { _, bundle ->
       val newItem = bundle.getString(ADD_ITEM_TITLE_KEY, "")
@@ -107,6 +91,27 @@ class ListFragment : Fragment() {
       }
     }
     return binding.root
+  }
+
+  private fun editItem(position: Int, title: String) {
+    parentFragmentManager
+      .beginTransaction()
+      .replace(R.id.container, AddItemFragment.editItemInstance(position, title))
+      .addToBackStack(AddItemFragment::class.java.canonicalName)
+      .commit()
+  }
+
+  private fun showDeleteDialog(position: Int, title: String) {
+    AlertDialog.Builder(requireContext())
+      .setTitle(getString(R.string.delete_item_title))
+      .setMessage(getString(R.string.delete_item_message, title))
+      .setPositiveButton(getString(R.string.delete_item_button_delete)) { _, _ ->
+        adapter.remove(position)
+      }
+      .setNegativeButton(getString(R.string.delete_item_button_cancel)) { _, _ ->
+        adapter.notifyItemChanged(position)
+      }
+      .show()
   }
 
   interface ListFragmentListener {
