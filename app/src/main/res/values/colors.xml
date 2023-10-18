@@ -6,8 +6,8 @@
   <color name="gray2">#999999</color>
   <color name="gray3">#666666</color>
   <color name="gray4">#333333</color>
-  <color name="blue1">#99d6ff</color>
-  <color name="blue2">#80ccff</color>
-  <color name="blue3">#66c2ff</color>
-  <color name="blue4">#4db8ff</color>
+  <color name="blue1">#99ddff</color>
+  <color name="blue2">#66ccff</color>
+  <color name="blue3">#33bbff</color>
+  <color name="blue4">#00aaff</color>
 </resources>
