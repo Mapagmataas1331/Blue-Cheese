@@ -1,6 +1,7 @@
 <resources>
   <string name="app_name">"Blue Cheese "</string>
   <string name="element_title">Title</string>
+  <string name="element_description">Description</string>
   <string name="edit_button">Edit</string>
   <string name="delete_button">Delete</string>
   <string name="add_button">Add</string>
