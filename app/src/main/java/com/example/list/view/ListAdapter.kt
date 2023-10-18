@@ -1,6 +1,5 @@
 package com.example.list.view
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -45,9 +44,9 @@ class ListAdapter(
       showDeleteDialog(position, itemTitle)
     }
 
-    holder.itemView.setOnClickListener {
-      onItemClick(position, itemTitle)
-    }
+    //holder.itemView.setOnClickListener {
+      // click on item
+    //}
 
     holder.itemView.setOnLongClickListener {
       showDeleteDialog(position, itemTitle)
@@ -71,12 +70,11 @@ class ListAdapter(
     notifyItemInserted(dataSet.lastIndex)
   }
 
-  @SuppressLint("NotifyDataSetChanged")
   fun remove(position: Int) {
     dataSet.removeAt(position)
     notifyItemRemoved(position)
+    notifyItemRangeChanged(position, dataSet.size)
     sharedPreferencesManager.saveItems(dataSet)
-    notifyDataSetChanged()
   }
 
   fun edit(position: Int, newTitle: String) {
