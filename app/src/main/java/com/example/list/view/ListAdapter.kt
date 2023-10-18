@@ -9,12 +9,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import com.example.list.R
-
+import kotlinx.serialization.Serializable
 class ListAdapter(
-  initialDataSet: List<String>,
+  initialDataSet: List<ListItemDataModel>,
   private val context: Context,
   private val sharedPreferencesManager: SharedPreferencesManager,
-  private val onItemClick: (position: Int, title: String) -> Unit
+  private val onItemClick: (position: Int, item: ListItemDataModel) -> Unit
 ) : RecyclerView.Adapter<ListAdapter.ListViewHolder>() {
   private val dataSet = initialDataSet.toMutableList()
 
@@ -29,27 +29,26 @@ class ListAdapter(
       .inflate(R.layout.list_item, parent, false)
     return ListViewHolder(binding)
   }
-
   override fun getItemCount(): Int = dataSet.size
 
   override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-    val itemTitle = dataSet[position]
-    holder.textView.text = itemTitle
+    val item = dataSet[position]
+    holder.textView.text = item.title
 
     holder.editButton.setOnClickListener {
-      onItemClick(position, itemTitle)
+      onItemClick(position, item)
+    }
+
+    holder.itemView.setOnClickListener {
+      onItemClick(position, item)
     }
 
     holder.deleteButton.setOnClickListener {
-      showDeleteDialog(position, itemTitle)
+      showDeleteDialog(position, item.title)
     }
 
-    //holder.itemView.setOnClickListener {
-      // click on item
-    //}
-
     holder.itemView.setOnLongClickListener {
-      showDeleteDialog(position, itemTitle)
+      showDeleteDialog(position, item.title)
       true
     }
   }
@@ -65,9 +64,16 @@ class ListAdapter(
       .show()
   }
 
-  fun add(item: String) {
+  fun getData(): List<ListItemDataModel> = dataSet
+
+  fun add(item: ListItemDataModel) {
     dataSet.add(item)
     notifyItemInserted(dataSet.lastIndex)
+  }
+
+  fun edit(position: Int, newItem: ListItemDataModel) {
+    dataSet[position] = newItem
+    notifyItemChanged(position)
   }
 
   fun remove(position: Int) {
@@ -77,16 +83,12 @@ class ListAdapter(
     sharedPreferencesManager.saveItems(dataSet)
   }
 
-  fun edit(position: Int, newTitle: String) {
-    dataSet[position] = newTitle
-    notifyItemChanged(position)
-  }
-
-  fun getDataAtPosition(position: Int): String {
+  fun getDataAtPosition(position: Int): ListItemDataModel {
     return dataSet[position]
   }
-
-  fun getData(): List<String> {
-    return dataSet.toList()
-  }
 }
+@Serializable
+data class ListItemDataModel(
+  val title: String,
+  val description: String
+)

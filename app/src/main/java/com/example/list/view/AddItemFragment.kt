@@ -17,6 +17,10 @@ class AddItemFragment : Fragment() {
   private val itemTitle: String?
     get() = arguments?.getString(TITLE_KEY)
 
+  private val itemDescription: String?
+    get() = arguments?.getString(DESCRIPTION_KEY)
+
+
   private var adapter: ListAdapter? = null
   private var sharedPreferencesManager: SharedPreferencesManager? = null
 
@@ -34,26 +38,36 @@ class AddItemFragment : Fragment() {
     savedInstanceState: Bundle?
   ): View = AddItemFragmentBinding.inflate(inflater, container, false).apply {
     title.setText(itemTitle ?: "")
+    description.setText(itemDescription ?: "")
     floatBtnCreate.setOnClickListener {
+      val newItem = ListItemDataModel(
+        title = title.text.toString(),
+        description = description.text.toString()
+      )
+
       if (itemPosition == null) {
         setFragmentResult(
           ListFragment.ADD_ITEM_REQUEST_KEY,
-          bundleOf(ListFragment.ADD_ITEM_TITLE_KEY to title.text.toString())
+          bundleOf(
+            ListFragment.ADD_ITEM_TITLE_KEY to newItem.title,
+            ListFragment.ADD_ITEM_DESCRIPTION_KEY to newItem.description
+          )
         )
-        adapter?.add(title.text.toString()) // Add this line to save the new item
+        adapter?.add(newItem)
       } else {
         setFragmentResult(
           ListFragment.EDIT_ITEM_REQUEST_KEY,
           bundleOf(
-            ListFragment.ADD_ITEM_TITLE_KEY to title.text.toString(),
+            ListFragment.ADD_ITEM_TITLE_KEY to newItem.title,
+            ListFragment.ADD_ITEM_DESCRIPTION_KEY to newItem.description,
             ListFragment.ADD_ITEM_POSITION_KEY to itemPosition
           )
         )
         itemPosition?.let { position ->
-          adapter?.edit(position, title.text.toString()) // Add this line to save the edited item
+          adapter?.edit(position, newItem)
         }
       }
-      sharedPreferencesManager?.saveItems(adapter?.getData() ?: emptyList()) // Save items to SharedPreferences
+      sharedPreferencesManager?.saveItems(adapter?.getData() ?: emptyList())
       parentFragmentManager.popBackStack()
     }
   }.root
@@ -61,10 +75,15 @@ class AddItemFragment : Fragment() {
   companion object {
     const val POSITION_KEY = "POSITION_KEY"
     const val TITLE_KEY = "TITLE_KEY"
+    const val DESCRIPTION_KEY = "DESCRIPTION_KEY"
 
-    fun editItemInstance(position: Int, title: String): Fragment {
+    fun editItemInstance(position: Int, title: String, description: String): AddItemFragment {
       val fragment = AddItemFragment()
-      val bundle = bundleOf(POSITION_KEY to position, TITLE_KEY to title)
+      val bundle = bundleOf(
+        POSITION_KEY to position,
+        TITLE_KEY to title,
+        DESCRIPTION_KEY to description
+      )
       fragment.arguments = bundle
       return fragment
     }

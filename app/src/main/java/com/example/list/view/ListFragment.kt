@@ -4,16 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.list.R
 import com.example.list.databinding.ListFragmentBinding
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
-import androidx.core.content.res.ResourcesCompat
-import androidx.appcompat.app.AlertDialog
 
 class ListFragment : Fragment() {
   private lateinit var adapter: ListAdapter
@@ -31,12 +31,12 @@ class ListFragment : Fragment() {
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
       val position = viewHolder.adapterPosition
-      val title = adapter.getDataAtPosition(position)
+      val item = adapter.getDataAtPosition(position)
 
       if (swipeDir == ItemTouchHelper.LEFT) {
-        showDeleteDialog(position, title)
+        showDeleteDialog(position, item.title)
       } else if (swipeDir == ItemTouchHelper.RIGHT) {
-        editItem(position, title)
+        showEditItemFragment(position, item)
       }
     }
   }
@@ -49,20 +49,20 @@ class ListFragment : Fragment() {
       initialDataSet = savedItems,
       context = requireContext(),
       sharedPreferencesManager = sharedPreferencesManager,
-    ) { position, title ->
-      editItem(position, title)
-    }
+    ) { position, item -> showEditItemFragment(position, item) }
 
     setFragmentResultListener(ADD_ITEM_REQUEST_KEY) { _, bundle ->
-      val newItem = bundle.getString(ADD_ITEM_TITLE_KEY, "")
-      adapter.add(newItem)
+      val newItemTitle = bundle.getString(ADD_ITEM_TITLE_KEY, "")
+      val newItemDescription = bundle.getString(ADD_ITEM_DESCRIPTION_KEY, "")
+      adapter.add(ListItemDataModel(newItemTitle, newItemDescription))
       sharedPreferencesManager.saveItems(adapter.getData())
     }
 
     setFragmentResultListener(EDIT_ITEM_REQUEST_KEY) { _, bundle ->
       val position = bundle.getInt(ADD_ITEM_POSITION_KEY)
-      val editItem = bundle.getString(ADD_ITEM_TITLE_KEY, "")
-      adapter.edit(position, editItem)
+      val newItemTitle = bundle.getString(ADD_ITEM_TITLE_KEY, "")
+      val newItemDescription = bundle.getString(ADD_ITEM_DESCRIPTION_KEY, "")
+      adapter.edit(position, ListItemDataModel(newItemTitle, newItemDescription))
       sharedPreferencesManager.saveItems(adapter.getData())
     }
   }
@@ -93,10 +93,10 @@ class ListFragment : Fragment() {
     return binding.root
   }
 
-  private fun editItem(position: Int, title: String) {
+  private fun showEditItemFragment(position: Int, item: ListItemDataModel) {
     parentFragmentManager
       .beginTransaction()
-      .replace(R.id.container, AddItemFragment.editItemInstance(position, title))
+      .replace(R.id.container, AddItemFragment.editItemInstance(position, item.title, item.description))
       .addToBackStack(AddItemFragment::class.java.canonicalName)
       .commit()
   }
@@ -124,6 +124,7 @@ class ListFragment : Fragment() {
     const val EDIT_ITEM_REQUEST_KEY = "EDIT_ITEM_REQUEST_KEY"
 
     const val ADD_ITEM_TITLE_KEY = "ADD_ITEM_TITLE_KEY"
+    const val ADD_ITEM_DESCRIPTION_KEY = "ADD_ITEM_DESCRIPTION_KEY"
     const val ADD_ITEM_POSITION_KEY = "ADD_ITEM_EXTRA_KEY"
   }
 }
