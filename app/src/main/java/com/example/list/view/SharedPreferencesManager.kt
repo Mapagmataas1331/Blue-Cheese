@@ -2,7 +2,6 @@ package com.example.list.view
 
 import android.content.Context
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 class SharedPreferencesManager(context: Context) {
