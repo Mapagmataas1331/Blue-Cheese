@@ -10,6 +10,10 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
 import com.example.list.R
 import kotlinx.serialization.Serializable
+import org.joda.time.DateTime
+import org.joda.time.Period
+import org.joda.time.format.PeriodFormatterBuilder
+
 class ListAdapter(
   initialDataSet: List<ListItemDataModel>,
   private val context: Context,
@@ -17,6 +21,7 @@ class ListAdapter(
   private val onItemClick: (position: Int, item: ListItemDataModel) -> Unit
 ) : RecyclerView.Adapter<ListAdapter.ListViewHolder>() {
   private val dataSet = initialDataSet.toMutableList()
+  private val dateFormat = org.joda.time.format.DateTimeFormat.forPattern("dd MM yyyy")
 
   inner class ListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val textView: TextView = view.findViewById(R.id.item_text)
@@ -33,7 +38,7 @@ class ListAdapter(
 
   override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
     val item = dataSet[position]
-    holder.textView.text = item.title
+    holder.textView.text = getItemTitleWithTimeDifference(item)
 
     holder.editButton.setOnClickListener {
       onItemClick(position, item)
@@ -52,6 +57,30 @@ class ListAdapter(
       true
     }
   }
+
+  private fun getItemTitleWithTimeDifference(item: ListItemDataModel): String {
+    if (item.date.isEmpty()) return item.title
+    val itemDate = parseDate(item.date)
+    val currentDate = DateTime()
+    val timeDifference = calculateTimeDifference(itemDate, currentDate)
+
+    return "${item.title} ($timeDifference)"
+  }
+
+  private fun parseDate(dateString: String): DateTime {
+    return dateFormat.parseDateTime(dateString) ?: DateTime()
+  }
+
+  private fun calculateTimeDifference(endDate: DateTime, startDate: DateTime): String {
+    val period = Period(startDate, endDate)
+    val formatter = PeriodFormatterBuilder()
+      .appendYears().appendSuffix("y ").appendMonths().appendSuffix("m ").appendDays().appendSuffix("d")
+      .printZeroNever()
+      .toFormatter()
+
+    return formatter.print(period)
+  }
+
 
   private fun showDeleteDialog(position: Int, itemTitle: String) {
     AlertDialog.Builder(context)
