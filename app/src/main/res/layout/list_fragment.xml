@@ -33,7 +33,7 @@
      android:id="@+id/floatBtnAdd"
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
-     android:layout_marginRight="8dp"
+     android:layout_marginEnd="8dp"
      android:layout_marginBottom="16dp"
      android:backgroundTint="@color/blue1"
      android:contentDescription="@string/add_button"

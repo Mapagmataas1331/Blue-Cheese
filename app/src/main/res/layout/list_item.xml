@@ -4,6 +4,7 @@
    android:layout_width="match_parent"
    android:layout_height="60dp"
    android:padding="12dp"
+   android:background="@color/wb1"
    xmlns:app="http://schemas.android.com/apk/res-auto"
    xmlns:tools="http://schemas.android.com/tools">
 
@@ -23,8 +24,8 @@
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
      android:textAlignment="center"
-     android:textColor="@color/gray3"
-     android:textSize="18dp"
+     android:textColor="@color/wb7"
+     android:textSize="18sp"
      app:layout_constraintTop_toTopOf="parent"
      app:layout_constraintBottom_toBottomOf="parent"
      app:layout_constraintStart_toEndOf="@id/item_edit"
@@ -36,7 +37,7 @@
      android:layout_width="32dp"
      android:layout_height="32dp"
      android:background="@drawable/baseline_delete_24"
-     android:backgroundTint="@color/blue3"
+     android:backgroundTint="@color/red2"
      app:layout_constraintTop_toTopOf="parent"
      app:layout_constraintEnd_toEndOf="parent"
      app:layout_constraintBottom_toBottomOf="parent"

@@ -1,13 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="black">#FFFFFF</color>
-  <color name="white">#000000</color>
-  <color name="gray1">#333333</color>
-  <color name="gray2">#666666</color>
-  <color name="gray3">#999999</color>
-  <color name="gray4">#CCCCCC</color>
-  <color name="blue1">#4db8ff</color>
-  <color name="blue2">#66c2ff</color>
-  <color name="blue3">#80ccff</color>
-  <color name="blue4">#99d6ff</color>
+  <color name="wb1">#333333</color>
+  <color name="wb2">#444444</color>
+  <color name="wb3">#555555</color>
+  <color name="wb4">#666666</color>
+  <color name="wb5">#9e9e9e</color>
+  <color name="wb6">#bdbdbd</color>
+  <color name="wb7">#e0e0e0</color>
+  <color name="wb8">#f5f5f5</color>
+
+  <color name="blue1">#00aaff</color>
+  <color name="blue2">#33bbff</color>
+  <color name="blue3">#66ccff</color>
+  <color name="blue4">#99ddff</color>
+
+  <color name="purple1">#5f5078</color>
+  <color name="purple2">#72589b</color>
+  <color name="purple3">#8d73b5</color>
+  <color name="purple4">#a178e4</color>
+
+  <color name="red1">#ff4747</color>
+  <color name="red2">#ff6b6b</color>
+  <color name="red3">#ff8e8e</color>
+  <color name="red4">#ffb2b2</color>
 </resources>
