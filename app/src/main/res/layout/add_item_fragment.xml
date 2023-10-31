@@ -37,12 +37,8 @@
      android:id="@+id/floatBtnCreate"
      android:layout_width="wrap_content"
      android:layout_height="wrap_content"
-<<<<<<< Updated upstream
      android:layout_marginRight="8dp"
      android:layout_marginBottom="16dp"
-=======
-     android:layout_margin="8dp"
->>>>>>> Stashed changes
      android:layout_gravity="bottom|end"
      android:src="@drawable/baseline_check_24"
      android:backgroundTint="@color/blue1"
