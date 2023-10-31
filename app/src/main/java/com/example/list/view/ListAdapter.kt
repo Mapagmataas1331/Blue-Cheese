@@ -11,8 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.list.R
 import kotlinx.serialization.Serializable
 import org.joda.time.DateTime
-import org.joda.time.Period
-import org.joda.time.format.PeriodFormatterBuilder
+import org.joda.time.Days
 
 class ListAdapter(
   initialDataSet: List<ListItemDataModel>,
@@ -60,27 +59,13 @@ class ListAdapter(
 
   private fun getItemTitleWithTimeDifference(item: ListItemDataModel): String {
     if (item.date.isEmpty()) return item.title
-    val itemDate = parseDate(item.date)
+    val itemDate = dateFormat.parseDateTime(item.date) ?: DateTime()
     val currentDate = DateTime()
-    val timeDifference = calculateTimeDifference(itemDate, currentDate)
+    var timeDifference = Days.daysBetween(currentDate, itemDate).days
+    if (currentDate.isBefore(itemDate)) timeDifference++
 
     return "${item.title} ($timeDifference)"
   }
-
-  private fun parseDate(dateString: String): DateTime {
-    return dateFormat.parseDateTime(dateString) ?: DateTime()
-  }
-
-  private fun calculateTimeDifference(endDate: DateTime, startDate: DateTime): String {
-    val period = Period(startDate, endDate)
-    val formatter = PeriodFormatterBuilder()
-      .appendYears().appendSuffix("y ").appendMonths().appendSuffix("m ").appendDays().appendSuffix("d")
-      .printZeroNever()
-      .toFormatter()
-
-    return formatter.print(period)
-  }
-
 
   private fun showDeleteDialog(position: Int, itemTitle: String) {
     AlertDialog.Builder(context)

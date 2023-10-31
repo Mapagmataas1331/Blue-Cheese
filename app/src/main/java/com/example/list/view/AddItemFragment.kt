@@ -1,5 +1,8 @@
 package com.example.list.view
 
+import android.graphics.Rect
+import android.graphics.drawable.Drawable
+import android.view.MotionEvent
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import java.util.Calendar
@@ -47,23 +50,37 @@ class AddItemFragment : Fragment() {
     title.setText(itemTitle ?: "")
     description.setText(itemDescription ?: "")
     editTextDate.setText(itemDate ?: "")
-    editTextDate.setOnClickListener {
-      val calendar = Calendar.getInstance()
-      val currentYear = calendar.get(Calendar.YEAR)
-      val currentMonth = calendar.get(Calendar.MONTH)
-      val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
+    editTextDate.setOnTouchListener { v, event ->
+      if (event.action == MotionEvent.ACTION_UP) {
+        val drawable: Drawable? = editTextDate.compoundDrawablesRelative[2]
+        if (drawable != null) {
+          val bounds: Rect = drawable.bounds
+          val x: Int = event.rawX.toInt()
+          if (x >= (v.right - bounds.width())) {
+            val calendar = Calendar.getInstance()
+            val currentYear = calendar.get(Calendar.YEAR)
+            val currentMonth = calendar.get(Calendar.MONTH)
+            val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
 
-      val datePickerDialog = DatePickerDialog(
-        requireContext(),
-        { _, year, month, dayOfMonth ->
-          editTextDate.setText("$dayOfMonth ${month + 1} $year")
-        },
-        currentYear,
-        currentMonth,
-        currentDay
-      )
-      datePickerDialog.show()
+            val datePickerDialog = DatePickerDialog(
+              requireContext(),
+              { _, year, month, dayOfMonth ->
+                editTextDate.setText("$dayOfMonth ${month + 1} $year")
+              },
+              currentYear,
+              currentMonth,
+              currentDay
+            )
+            datePickerDialog.show()
+            return@setOnTouchListener true
+          }
+          editTextDate.performClick()
+          return@setOnTouchListener false
+        }
+      }
+      false
     }
+
     floatBtnCreate.setOnClickListener {
       val newItem = ListItemDataModel(
         title = title.text.toString(),
