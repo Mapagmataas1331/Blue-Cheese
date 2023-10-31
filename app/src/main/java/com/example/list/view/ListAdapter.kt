@@ -90,5 +90,6 @@ class ListAdapter(
 @Serializable
 data class ListItemDataModel(
   val title: String,
-  val description: String
+  val description: String,
+  val date: String
 )

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">Голубой Сыр</string>
-  <string name="element_title">Название элемента</string>
+  <string name="element_title">Название продукта</string>
   <string name="element_description">Описание</string>
   <string name="edit_button">Изменить</string>
   <string name="delete_button">Удалить</string>
@@ -12,4 +12,5 @@
   <string name="delete_item_button_delete">Удалить</string>
   <string name="delete_item_button_cancel">Отменить</string>
   <string name="cancel_button">Отменть</string>
+  <string name="date_pick">Выберите дату</string>
 </resources>

@@ -34,9 +34,9 @@ class ListFragment : Fragment() {
       val item = adapter.getDataAtPosition(position)
 
       if (swipeDir == ItemTouchHelper.LEFT) {
-        showDeleteDialog(position, item.title)
-      } else if (swipeDir == ItemTouchHelper.RIGHT) {
         showEditItemFragment(position, item)
+      } else if (swipeDir == ItemTouchHelper.RIGHT) {
+        showDeleteDialog(position, item.title)
       }
     }
   }
@@ -54,7 +54,8 @@ class ListFragment : Fragment() {
     setFragmentResultListener(ADD_ITEM_REQUEST_KEY) { _, bundle ->
       val newItemTitle = bundle.getString(ADD_ITEM_TITLE_KEY, "")
       val newItemDescription = bundle.getString(ADD_ITEM_DESCRIPTION_KEY, "")
-      adapter.add(ListItemDataModel(newItemTitle, newItemDescription))
+      val newItemDate = bundle.getString(ADD_ITEM_DATE_KEY, "")
+      adapter.add(ListItemDataModel(newItemTitle, newItemDescription, newItemDate))
       sharedPreferencesManager.saveItems(adapter.getData())
     }
 
@@ -62,7 +63,8 @@ class ListFragment : Fragment() {
       val position = bundle.getInt(ADD_ITEM_POSITION_KEY)
       val newItemTitle = bundle.getString(ADD_ITEM_TITLE_KEY, "")
       val newItemDescription = bundle.getString(ADD_ITEM_DESCRIPTION_KEY, "")
-      adapter.edit(position, ListItemDataModel(newItemTitle, newItemDescription))
+      val newItemDate = bundle.getString(ADD_ITEM_DATE_KEY, "")
+      adapter.edit(position, ListItemDataModel(newItemTitle, newItemDescription, newItemDate))
       sharedPreferencesManager.saveItems(adapter.getData())
     }
   }
@@ -96,7 +98,7 @@ class ListFragment : Fragment() {
   private fun showEditItemFragment(position: Int, item: ListItemDataModel) {
     parentFragmentManager
       .beginTransaction()
-      .replace(R.id.container, AddItemFragment.editItemInstance(position, item.title, item.description))
+      .replace(R.id.container, AddItemFragment.editItemInstance(position, item.title, item.description, item.date))
       .addToBackStack(AddItemFragment::class.java.canonicalName)
       .commit()
   }
@@ -125,6 +127,7 @@ class ListFragment : Fragment() {
 
     const val ADD_ITEM_TITLE_KEY = "ADD_ITEM_TITLE_KEY"
     const val ADD_ITEM_DESCRIPTION_KEY = "ADD_ITEM_DESCRIPTION_KEY"
-    const val ADD_ITEM_POSITION_KEY = "ADD_ITEM_EXTRA_KEY"
+    const val ADD_ITEM_DATE_KEY = "ADD_ITEM_DATE_KEY"
+    const val ADD_ITEM_POSITION_KEY = "ADD_ITEM_POSITION_KEY"
   }
 }
