@@ -1,5 +1,6 @@
 package com.example.list.view
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import java.util.Calendar
 import android.content.Context
@@ -26,8 +27,6 @@ class AddItemFragment : Fragment() {
   private val itemDate: String?
     get() = arguments?.getString(DATE_KEY)
 
-  private var selectedDate: String = ""
-
   private var adapter: ListAdapter? = null
   private var sharedPreferencesManager: SharedPreferencesManager? = null
 
@@ -39,6 +38,7 @@ class AddItemFragment : Fragment() {
     }
   }
 
+  @SuppressLint("SetTextI18n")
   override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,
@@ -56,8 +56,7 @@ class AddItemFragment : Fragment() {
       val datePickerDialog = DatePickerDialog(
         requireContext(),
         { _, year, month, dayOfMonth ->
-          selectedDate = "$dayOfMonth ${month + 1} $year"
-          editTextDate.setText(selectedDate)
+          editTextDate.setText("$dayOfMonth ${month + 1} $year")
         },
         currentYear,
         currentMonth,
@@ -69,7 +68,7 @@ class AddItemFragment : Fragment() {
       val newItem = ListItemDataModel(
         title = title.text.toString(),
         description = description.text.toString(),
-        date = selectedDate
+        date = editTextDate.text.toString(),
       )
 
       if (itemPosition == null) {
