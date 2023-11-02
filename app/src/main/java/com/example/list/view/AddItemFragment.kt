@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,13 +35,15 @@ class AddItemFragment : Fragment() {
   private var adapter: ListAdapter? = null
   private var sharedPreferencesManager: SharedPreferencesManager? = null
 
-  private fun scheduleNotification(title: String, date: String, days: Byte) {
-    if (date.isEmpty()) {
+  private fun scheduleNotification(item: ListItemDataModel, days: Int) {
+    if (item.date.isEmpty() or item.title.isEmpty()) {
       return
     }
     val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
     val intent = Intent(requireContext(), NotificationReceiver::class.java)
-    intent.putExtra("title", title)
+    intent.putExtra("title", item.title)
+    intent.putExtra("description", item.description)
+    intent.putExtra("date", item.date)
     val pendingIntent = PendingIntent.getBroadcast(
       requireContext(),
       0,
@@ -48,10 +51,10 @@ class AddItemFragment : Fragment() {
       PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
     )
 
-    val itemDate = org.joda.time.format.DateTimeFormat.forPattern("dd MM yyyy").parseDateTime(date) ?: DateTime()
-    val notificationTime = DateTime.now().millis + 10000
-      //itemDate.minusDays(days).millis
-
+    val itemDate = org.joda.time.format.DateTimeFormat.forPattern("dd MM yyyy").parseDateTime(item.date) ?: DateTime()
+    val notificationTime = DateTime.now().millis + 5000 //itemDate.minusDays(days).millis
+    Log.d("notifications","Now: ${DateTime.now().millis}")
+    Log.d("notifications","notificationTime: $notificationTime")
     alarmManager.set(
       AlarmManager.RTC,
       notificationTime,
@@ -111,7 +114,7 @@ class AddItemFragment : Fragment() {
           )
         )
         adapter?.add(newItem)
-        scheduleNotification(newItem.title, newItem.date, 1)
+        scheduleNotification(newItem, 1)
       } else {
         setFragmentResult(
           ListFragment.EDIT_ITEM_REQUEST_KEY,

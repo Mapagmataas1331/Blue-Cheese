@@ -91,6 +91,9 @@ class ListFragment : Fragment() {
           .addToBackStack(AddItemFragment::class.java.canonicalName)
           .commit()
       }
+      image.setOnClickListener {
+        context?.let { it1 -> NotificationReceiver.showNotification(it1, "Wow", "You found me!", "description") }
+      }
     }
     return binding.root
   }
