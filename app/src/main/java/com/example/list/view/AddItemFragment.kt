@@ -1,8 +1,11 @@
 package com.example.list.view
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
 import android.app.DatePickerDialog
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +14,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import com.example.list.databinding.AddItemFragmentBinding
+import org.joda.time.DateTime
 import java.util.Calendar
 
 
@@ -29,6 +33,31 @@ class AddItemFragment : Fragment() {
 
   private var adapter: ListAdapter? = null
   private var sharedPreferencesManager: SharedPreferencesManager? = null
+
+  private fun scheduleNotification(title: String, date: String, days: Byte) {
+    if (date.isEmpty()) {
+      return
+    }
+    val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    val intent = Intent(requireContext(), NotificationReceiver::class.java)
+    intent.putExtra("title", title)
+    val pendingIntent = PendingIntent.getBroadcast(
+      requireContext(),
+      0,
+      intent,
+      PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+    )
+
+    val itemDate = org.joda.time.format.DateTimeFormat.forPattern("dd MM yyyy").parseDateTime(date) ?: DateTime()
+    val notificationTime = DateTime.now().millis + 10000
+      //itemDate.minusDays(days).millis
+
+    alarmManager.set(
+      AlarmManager.RTC,
+      notificationTime,
+      pendingIntent
+    )
+  }
 
   override fun onAttach(context: Context) {
     super.onAttach(context)
@@ -82,6 +111,7 @@ class AddItemFragment : Fragment() {
           )
         )
         adapter?.add(newItem)
+        scheduleNotification(newItem.title, newItem.date, 1)
       } else {
         setFragmentResult(
           ListFragment.EDIT_ITEM_REQUEST_KEY,
