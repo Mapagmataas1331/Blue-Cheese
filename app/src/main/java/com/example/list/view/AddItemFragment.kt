@@ -1,11 +1,7 @@
 package com.example.list.view
 
-import android.graphics.Rect
-import android.graphics.drawable.Drawable
-import android.view.MotionEvent
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import java.util.Calendar
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,6 +11,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import com.example.list.databinding.AddItemFragmentBinding
+import java.util.Calendar
 
 
 class AddItemFragment : Fragment() {
@@ -49,43 +46,30 @@ class AddItemFragment : Fragment() {
   ): View = AddItemFragmentBinding.inflate(inflater, container, false).apply {
     title.setText(itemTitle ?: "")
     description.setText(itemDescription ?: "")
-    editTextDate.setText(itemDate ?: "")
-    editTextDate.setOnTouchListener { v, event ->
-      if (event.action == MotionEvent.ACTION_UP) {
-        val drawable: Drawable? = editTextDate.compoundDrawablesRelative[2]
-        if (drawable != null) {
-          val bounds: Rect = drawable.bounds
-          val x: Int = event.rawX.toInt()
-          if (x >= (v.right - bounds.width())) {
-            val calendar = Calendar.getInstance()
-            val currentYear = calendar.get(Calendar.YEAR)
-            val currentMonth = calendar.get(Calendar.MONTH)
-            val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
+    dateText.setText(itemDate ?: "")
+    datePicker.setOnClickListener {
+      val calendar = Calendar.getInstance()
+      val currentYear = calendar.get(Calendar.YEAR)
+      val currentMonth = calendar.get(Calendar.MONTH)
+      val currentDay = calendar.get(Calendar.DAY_OF_MONTH)
 
-            val datePickerDialog = DatePickerDialog(
-              requireContext(),
-              { _, year, month, dayOfMonth ->
-                editTextDate.setText("$dayOfMonth ${month + 1} $year")
-              },
-              currentYear,
-              currentMonth,
-              currentDay
-            )
-            datePickerDialog.show()
-            return@setOnTouchListener true
-          }
-          editTextDate.performClick()
-          return@setOnTouchListener false
-        }
-      }
-      false
+      val datePickerDialog = DatePickerDialog(
+        requireContext(),
+        { _, year, month, dayOfMonth ->
+          dateText.setText("$dayOfMonth ${month + 1} $year")
+        },
+        currentYear,
+        currentMonth,
+        currentDay
+      )
+      datePickerDialog.show()
     }
 
     floatBtnCreate.setOnClickListener {
       val newItem = ListItemDataModel(
         title = title.text.toString(),
         description = description.text.toString(),
-        date = editTextDate.text.toString(),
+        date = dateText.text.toString(),
       )
 
       if (itemPosition == null) {
