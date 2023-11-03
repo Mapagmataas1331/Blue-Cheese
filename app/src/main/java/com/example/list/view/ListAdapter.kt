@@ -71,10 +71,10 @@ class ListAdapter(
     AlertDialog.Builder(context)
       .setTitle(context.getString(R.string.delete_item_title))
       .setMessage(context.getString(R.string.delete_item_message, itemTitle))
-      .setPositiveButton(context.getString(R.string.delete_item_button_delete)) { _, _ ->
+      .setPositiveButton(context.getString(R.string.delete_button)) { _, _ ->
         remove(position)
       }
-      .setNegativeButton(context.getString(R.string.delete_item_button_cancel), null)
+      .setNegativeButton(context.getString(R.string.delete_button), null)
       .show()
   }
 

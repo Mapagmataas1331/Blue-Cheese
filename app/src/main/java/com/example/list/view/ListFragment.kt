@@ -110,10 +110,10 @@ class ListFragment : Fragment() {
     AlertDialog.Builder(requireContext())
       .setTitle(getString(R.string.delete_item_title))
       .setMessage(getString(R.string.delete_item_message, title))
-      .setPositiveButton(getString(R.string.delete_item_button_delete)) { _, _ ->
+      .setPositiveButton(getString(R.string.delete_button)) { _, _ ->
         adapter.remove(position)
       }
-      .setNegativeButton(getString(R.string.delete_item_button_cancel)) { _, _ ->
+      .setNegativeButton(getString(R.string.delete_button)) { _, _ ->
         adapter.notifyItemChanged(position)
       }
       .show()

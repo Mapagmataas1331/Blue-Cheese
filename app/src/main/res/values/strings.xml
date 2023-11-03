@@ -2,14 +2,18 @@
   <string name="app_name">Blue Cheese</string>
   <string name="element_title">Product name</string>
   <string name="element_description">Description</string>
-  <string name="edit_button">Edit</string>
-  <string name="delete_button">Delete</string>
   <string name="add_button">Add</string>
   <string name="create_button">Create</string>
+  <string name="edit_button">Edit</string>
+  <string name="delete_button">Delete</string>
   <string name="cancel_button">Cancel</string>
   <string name="delete_item_title">Delete Item</string>
   <string name="delete_item_message">Are you sure you want to delete item: %1$s</string>
-  <string name="delete_item_button_delete">Delete</string>
-  <string name="delete_item_button_cancel">Cancel</string>
   <string name="date_pick">Select date</string>
+  <string name="notification_permission_granted">Notification Permission granted</string>
+  <string name="notification_permission">Notification Permission</string>
+  <string name="notification_permission_is_required_please_allow">Notification permission is required, Please allow them from setting</string>
+  <string name="notification_permission_is_required">Notification permission is required, to show notification</string>
+  <string name="ok">Ok</string>
+  <string name="alert">Alert</string>
 </resources>

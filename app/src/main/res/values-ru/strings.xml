@@ -9,8 +9,12 @@
   <string name="create_button">Создать</string>
   <string name="delete_item_title">Удалить элемент</string>
   <string name="delete_item_message">Вы уверены что хотите удалить элемент: %1$s</string>
-  <string name="delete_item_button_delete">Удалить</string>
-  <string name="delete_item_button_cancel">Отменить</string>
   <string name="cancel_button">Отменть</string>
   <string name="date_pick">Выберите дату</string>
+  <string name="notification_permission_granted">Разрешение на уведомление предоставлено</string>
+  <string name="notification_permission">Разрешение на уведомление</string>
+  <string name="notification_permission_is_required_please_allow">Требуется разрешение на уведомления. Разрешите их в настройке</string>
+  <string name="notification_permission_is_required">Разрешение на уведомления требуется чтобы отображать уведомления</string>
+  <string name="ok">Хорошо</string>
+  <string name="alert">Предупреждение</string>
 </resources>

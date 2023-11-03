@@ -29,7 +29,8 @@ class MainActivity : AppCompatActivity() {
           }
         }
       } else {
-        Toast.makeText(applicationContext, "notification permission granted", Toast.LENGTH_SHORT)
+        Toast.makeText(applicationContext,
+          getString(R.string.notification_permission_granted), Toast.LENGTH_SHORT)
           .show()
       }
     }
@@ -39,14 +40,14 @@ class MainActivity : AppCompatActivity() {
       this,
       com.google.android.material.R.style.MaterialAlertDialog_Material3
     )
-      .setTitle("Notification Permission")
-      .setMessage("Notification permission is required, Please allow notification permission from setting")
-      .setPositiveButton("Ok") { _, _ ->
+      .setTitle(getString(R.string.notification_permission))
+      .setMessage(getString(R.string.notification_permission_is_required_please_allow))
+      .setPositiveButton(getString(R.string.ok)) { _, _ ->
         val intent = Intent(ACTION_APPLICATION_DETAILS_SETTINGS)
         intent.data = Uri.parse("package:$packageName")
         startActivity(intent)
       }
-      .setNegativeButton("Cancel", null)
+      .setNegativeButton(R.string.cancel_button, null)
       .show()
   }
 
@@ -56,14 +57,14 @@ class MainActivity : AppCompatActivity() {
       this,
       com.google.android.material.R.style.MaterialAlertDialog_Material3
     )
-      .setTitle("Alert")
-      .setMessage("Notification permission is required, to show notification")
-      .setPositiveButton("Ok") { _, _ ->
+      .setTitle(getString(R.string.alert))
+      .setMessage(getString(R.string.notification_permission_is_required))
+      .setPositiveButton(R.string.ok) { _, _ ->
         if (Build.VERSION.SDK_INT >= 33) {
           notificationPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
         }
       }
-      .setNegativeButton("Cancel", null)
+      .setNegativeButton(R.string.cancel_button, null)
       .show()
   }
 
